@@ -38,10 +38,78 @@ To send us a pull request, please:
 GitHub provides additional document on [forking a repository](https://help.github.com/articles/fork-a-repo/) and
 [creating a pull request](https://help.github.com/articles/creating-a-pull-request/).
 
-## Finding contributions to work on
+### Initial Setup
 
-Looking at the existing issues is a great way to find something to contribute on. As our projects, by default, use the default GitHub issue labels (enhancement/bug/duplicate/help wanted/invalid/question/wontfix), looking at any 'help wanted' issues is a great place to start.
+Run pre-commit install to install the pre-commit hooks.
+
+```bash
+pre-commit install
+```
 
 ## Licensing
 
 See the LICENSE file for our project's licensing.
+
+## Changelog format
+
+We use the go-changelog to generate and update the changelog from files created in the .changelog/ directory. It is important that when you raise your Pull Request, there is a changelog entry which describes the changes your contribution makes. Not all changes require an entry in the changelog, guidance follows on what changes do.
+
+The changelog format requires an entry in the following format, where HEADER corresponds to the changelog category, and the entry is the changelog entry itself. The entry should be included in a file in the .changelog directory with the naming convention {PR-NUMBER}.txt. For example, to create a changelog entry for pull request 1234, there should be a file named .changelog/1234.txt.
+
+``````markdown
+```release-note:{HEADER}
+{ENTRY}
+```
+``````
+
+## Pull request types to CHANGELOG
+
+The CHANGELOG is intended to show operator-impacting changes to the codebase for a particular version. If every change or commit to the code resulted in an entry, the CHANGELOG would become less useful for operators. The lists below are general guidelines and examples for when a decision needs to be made to decide whether a change should have an entry.
+
+### Changes that should have a CHANGELOG entry
+
+#### Resource and provider bug fixes
+
+A new bug entry should use the `release-note:bug` header and have a prefix indicating the resource or data source it corresponds to, a colon, then followed by a brief summary. Use a `provider` prefix for provider level fixes.
+
+``````markdown
+```release-note:bug
+`Category`: Fix argument being optional
+```
+``````
+
+#### Resource and provider enhancements
+
+A new enhancement entry should use the `release-note:enhancement` header and have a prefix indicating the resource or data source it corresponds to, a colon, then followed by a brief summary. Use a `provider` prefix for provider level enhancements.
+
+``````markdown
+```release-note:enhancement
+`Category`: Add new argument
+```
+``````
+
+#### Deprecations
+
+A deprecation entry should use the `release-note:note` header and have a prefix indicating the resource or data source it corresponds to, a colon, then followed by a brief summary.
+
+``````markdown
+```release-note:note
+`Category`: The old_attribute is being deprecated in favor of the new_attribute to support new feature
+```
+``````
+
+#### Breaking changes and removals
+
+A breaking-change entry should use the `release-note:breaking-change` header and have a prefix indicating the resource or data source it corresponds to, a colon, then followed by a brief summary.
+
+``````markdown
+```release-note:breaking-change
+`Category`: This is a breaking change
+```
+``````
+
+### Changes that should *not* have a CHANGELOG entry
+
+* Testing updates
+* Code refactoring
+* CI pipeline changes
